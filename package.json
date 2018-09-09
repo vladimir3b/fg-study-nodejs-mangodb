@@ -1,0 +1,32 @@
+{
+  "name": "fg-study-nodejs-mangodb",
+  "version": "1.0.0",
+  "description": "learning nodejs + typescript + express + mongodb",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node --project ./tsconfig.json ./index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladimirioan82/fg-study-nodejs-mangodb.git"
+  },
+  "keywords": [
+    "learning",
+    "nodejs",
+    "typescript",
+    "mondodb",
+    "express"
+  ],
+  "author": "Vladimir-Ioan Vararu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vladimirioan82/fg-study-nodejs-mangodb/issues"
+  },
+  "homepage": "https://github.com/vladimirioan82/fg-study-nodejs-mangodb#readme",
+  "dependencies": {
+    "@types/node": "^10.9.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
+  }
+}
