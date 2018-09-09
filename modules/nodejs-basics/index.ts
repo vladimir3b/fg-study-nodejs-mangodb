@@ -7,10 +7,24 @@ export class NodejsBasics {
   private static _createSimpleWebServer(): http.Server {
     const webServer: http.Server = http.createServer((request: http.IncomingMessage, response: http.ServerResponse) => {
       console.log(request.url);
-      response.end('This is the simplest Web Server ever made...');      
+      switch (request.url) {
+        case '/':
+          response.end('This is the home-page...');   
+          break;
+        case '/about':
+          response.end('This is the about-page...');  
+          break;
+        case '/contact':
+          response.end('Contact us...');  
+          break;
+        default:
+          response.writeHead(404);
+          response.end('Error 404. Page not found...');
+      }      
     });
-    return webServer
+    return webServer;
   }
+
   public static startWebSever(port?: number): void {
     this._port = port || this._port;
     this._webServer = this._webServer || this._createSimpleWebServer();
