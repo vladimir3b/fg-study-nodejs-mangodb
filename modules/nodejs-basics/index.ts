@@ -1,4 +1,9 @@
 import * as http from 'http';
+import * as fs from 'fs';
+
+const ABOUT: Buffer = fs.readFileSync('./public/html/about.html');
+const CONTACT: Buffer = fs.readFileSync('./public/html/contact.html');
+const HOME: Buffer = fs.readFileSync('./public/html/home.html');
 
 export class NodejsBasics {
   private static _webServer: http.Server;
@@ -9,13 +14,13 @@ export class NodejsBasics {
       console.log(request.url);
       switch (request.url) {
         case '/':
-          response.end('This is the home-page...');   
+          response.end(HOME);   
           break;
         case '/about':
-          response.end('This is the about-page...');  
+          response.end(ABOUT);  
           break;
         case '/contact':
-          response.end('Contact us...');  
+          response.end(CONTACT);  
           break;
         default:
           response.writeHead(404);
