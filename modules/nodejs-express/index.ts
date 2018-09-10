@@ -7,7 +7,9 @@ export class ExpressServer {
   public static app: express.Express = express();
 
   public static createRoutes(): void  {
+
     this.app.use(express.static('public'));
+    
     this.app.get('/', (request: express.Request, response: express.Response) => {
       response.sendFile(path.resolve(__dirname, '../../public/html/home.html'));
     });
