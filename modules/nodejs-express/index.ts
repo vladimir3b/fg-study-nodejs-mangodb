@@ -11,10 +11,13 @@ export class ExpressServer {
     this.app.use(express.static('public'));
     
     this.app.get('/', (request: express.Request, response: express.Response) => {
-      response.sendFile(path.resolve(__dirname, '../../public/html/home.html'));
+      response.sendFile(path.resolve(__dirname, '../../public/html/index.html'));
     });
     this.app.get('/about', (request: express.Request, response: express.Response) => {
       response.sendFile(path.resolve(__dirname, '../../public/html/about.html'));
+    });
+    this.app.get('/post', (request: express.Request, response: express.Response) => {
+      response.sendFile(path.resolve(__dirname, '../../public/html/post.html'));
     });
     this.app.get('/contact', (request: express.Request, response: express.Response) => {
       response.sendFile(path.resolve(__dirname, '../../public/html/contact.html'));
