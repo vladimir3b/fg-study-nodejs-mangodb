@@ -1,17 +1,28 @@
 import * as express from 'express';
 import * as path from 'path';
+import * as handlebars from 'express-handlebars';
+import * as handlebarsSections from 'express-handlebars-sections';
+
 
 export class ExpressServer {
 
   public static PORT: number = 4000;
   public static app: express.Express = express();
 
-  public static createRoutes(): void  {
+  public static createServer(): void  {
 
     this.app.use(express.static('public'));
+
+    this.app.engine('hbs', handlebars({ 
+        extname: 'hbs',
+        defaultLayout: 'base',
+        layoutsDir: path.resolve(__dirname, '../../views/layouts')
+    }));
+    this.app.set('views', path.resolve(__dirname, '../../views'));       
+    this.app.set('view engine', 'hbs');
     
     this.app.get('/', (request: express.Request, response: express.Response) => {
-      response.sendFile(path.resolve(__dirname, '../../public/html/index.html'));
+      response.render('home');
     });
     this.app.get('/about', (request: express.Request, response: express.Response) => {
       response.sendFile(path.resolve(__dirname, '../../public/html/about.html'));
