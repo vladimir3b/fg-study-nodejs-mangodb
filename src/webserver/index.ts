@@ -1,8 +1,6 @@
 import * as express from 'express';
 import * as path from 'path';
 import * as handlebars from 'express-handlebars';
-import * as handlebarsSections from 'express-handlebars-sections';
-
 
 export class ExpressServer {
 
@@ -15,7 +13,7 @@ export class ExpressServer {
 
     this.app.engine('hbs', handlebars({ 
         extname: 'hbs',
-        defaultLayout: 'base',
+        defaultLayout: 'main',
         layoutsDir: path.resolve(__dirname, '../../views/layouts')
     }));
     this.app.set('views', path.resolve(__dirname, '../../views'));       
@@ -25,13 +23,18 @@ export class ExpressServer {
       response.render('home');
     });
     this.app.get('/about', (request: express.Request, response: express.Response) => {
-      response.sendFile(path.resolve(__dirname, '../../public/html/about.html'));
+      response.render('about');
     });
     this.app.get('/post', (request: express.Request, response: express.Response) => {
-      response.sendFile(path.resolve(__dirname, '../../public/html/post.html'));
+      response.render('post');;
     });
     this.app.get('/contact', (request: express.Request, response: express.Response) => {
-      response.sendFile(path.resolve(__dirname, '../../public/html/contact.html'));
+      response.render('contact', {
+        scripts: `
+          <script src="vendor/jquery/jquery.min.js"></script>
+          <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>    
+        `
+      });
     });
   }
 
