@@ -18,22 +18,25 @@ export class ExpressServer {
     this.app.engine('hbs', handlebars({ 
         extname: 'hbs',
         defaultLayout: 'main',
-        layoutsDir: path.resolve(__dirname, '../../views/layouts')
+        layoutsDir: path.resolve(__dirname, '../../views/layouts'),
+        helpers: {
+          niceDate: (date: Date) => date.toDateString()
+        }
     }));
     this.app.set('views', path.resolve(__dirname, '../../views'));       
     this.app.set('view engine', 'hbs');
     
 
     //get-routes
-    this.app.get('/', (request: express.Request, response: express.Response) => {
-      response.render('home');      
-      console.log(await Database.readPosts());
+    this.app.get('/', async (request: express.Request, response: express.Response) => {
+      response.render('home', { posts: await Database.readPosts() });
     });
     this.app.get('/about', (request: express.Request, response: express.Response) => {
       response.render('about');
     });
-    this.app.get('/post', (request: express.Request, response: express.Response) => {
-      response.render('post');
+    this.app.get('/post/:id', async (request: express.Request, response: express.Response) => {
+      console.log(await Database.readPostById(request.params.id));
+      response.render('post', { post: await Database.readPostById(request.params.id) });      
     });
     this.app.get('/contact', (request: express.Request, response: express.Response) => {
       response.render('contact', {
@@ -50,7 +53,7 @@ export class ExpressServer {
 
     //post-routes
     this.app.post('/posts/store', (request: express.Request, response: express.Response) => {
-       // this would not exist without this.app.use(bodyParser.json());
+      // this would not exist without this.app.use(bodyParser.json());
       Database.createPosts([request.body], () => {
         response.redirect('/');
       });

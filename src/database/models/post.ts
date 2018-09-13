@@ -1,23 +1,27 @@
 import * as mongoose from 'mongoose';
 
-interface IPostSchema {
+interface IPostModel extends mongoose.Document {
   title: string,
-  description: string,
-  content: string
-}
-
-interface IPost extends IPostSchema, mongoose.Document {};
+  subtitle: string,
+  content: string,
+  username: string,
+  createdAt: Date
+};
 
 const postSchema: mongoose.Schema = new mongoose.Schema({
   title:  String,
-  description: String,
-  content: String
+  subtitle: String,
+  content: String,
+  username: String,
+  createdAt: {
+    type: Date,
+    default: new Date()
+  }
 });
 
-const postModel: mongoose.Model<IPost> = mongoose.model('post', postSchema);
+const postModel: mongoose.Model<IPostModel> = mongoose.model('post', postSchema);
 
 export {
-  IPost,
-  IPostSchema,
+  IPostModel,
   postModel
 }
