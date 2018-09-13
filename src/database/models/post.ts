@@ -1,10 +1,12 @@
 import * as mongoose from 'mongoose';
 
-interface IPostSchema extends mongoose.Document {
+interface IPostSchema {
   title: string,
   description: string,
   content: string
 }
+
+interface IPost extends IPostSchema, mongoose.Document {};
 
 const postSchema: mongoose.Schema = new mongoose.Schema({
   title:  String,
@@ -12,9 +14,10 @@ const postSchema: mongoose.Schema = new mongoose.Schema({
   content: String
 });
 
-const postModel: mongoose.Model<IPostSchema> = mongoose.model('post', postSchema);
+const postModel: mongoose.Model<IPost> = mongoose.model('post', postSchema);
 
 export {
+  IPost,
   IPostSchema,
   postModel
 }
