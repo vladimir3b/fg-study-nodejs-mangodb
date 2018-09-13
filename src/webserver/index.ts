@@ -4,6 +4,7 @@ import * as handlebars from 'express-handlebars';
 import * as bodyParser from 'body-parser';
 import { Database } from '../database';
 
+
 export class ExpressServer {
 
   public static PORT: number = 4000;
@@ -35,7 +36,6 @@ export class ExpressServer {
       response.render('about');
     });
     this.app.get('/post/:id', async (request: express.Request, response: express.Response) => {
-      console.log(await Database.readPostById(request.params.id));
       response.render('post', { post: await Database.readPostById(request.params.id) });      
     });
     this.app.get('/contact', (request: express.Request, response: express.Response) => {

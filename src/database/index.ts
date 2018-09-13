@@ -1,6 +1,6 @@
 import { postModel, IPostModel } from './models/post';
 import * as mongoose from 'mongoose';
-import { AnyARecord } from 'dns';
+
 
 export class Database {
 
@@ -31,25 +31,5 @@ export class Database {
   public static readPostById(id: string): mongoose.DocumentQuery<IPostModel | null, IPostModel> {
     return this.post.findById(id);
   }
-
-  // public static updateById(id: string, newPost: object) {
-  //   this.post.findByIdAndUpdate(id, newPost, 
-  //     (error: mongoose.Error) => {
-  //       if (error) {
-  //         console.error(error);
-  //       }        
-  //     }      
-  //   );
-  // }
-
-  // public static removeById(id: string) {
-  //   this.post.findByIdAndRemove(id, 
-  //     (error: mongoose.Error) => {
-  //       if (error) {
-  //         console.error(error);
-  //       }        
-  //     }      
-  //   );
-  // }
 
 }
