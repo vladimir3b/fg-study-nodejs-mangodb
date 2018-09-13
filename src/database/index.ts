@@ -9,30 +9,22 @@ export class Database {
     mongoose.connect('mongodb://localhost/node-js-blog', { useNewUrlParser: true });
   }
 
-  public static createPost(posts: Array<IPostSchema>) {
+  public static createPosts(posts: Array<IPostSchema>, callback: Function) {
     posts.forEach((post: IPostSchema) => {
       this.post.create(post, 
         (error: mongoose.Error, post: mongoose.Model<IPost>) => {
           if (error) {
             console.error(error);
           } else {
-            console.log('Data has been added.');
+            callback();
           }   
         }
       );
     });
   }
 
-  public static readPosts(queryObject: object = {}) {
-    this.post.find(queryObject, 
-      (error: mongoose.Error, posts: Array<mongoose.Model<IPost>>) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log(posts);
-        }        
-      }
-    );
+  public static async readPosts(queryObject: object = {}): Promise<Array<IPost>> {
+    return this.post.find(queryObject);
   }
 
   public static readPostById(id: string) {

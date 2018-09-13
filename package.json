@@ -25,10 +25,12 @@
   },
   "homepage": "https://github.com/vladimirioan82/fg-study-nodejs-mangodb#readme",
   "dependencies": {
+    "@types/body-parser": "^1.17.0",
     "@types/express": "^4.16.0",
     "@types/express-handlebars": "0.0.30",
     "@types/mongoose": "^5.2.12",
     "@types/node": "^10.9.4",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "mongoose": "^5.2.14",
