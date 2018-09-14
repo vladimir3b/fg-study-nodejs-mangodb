@@ -10,7 +10,10 @@ import * as handlebars from 'express-handlebars';
 import * as bodyParser from 'body-parser';
 import * as fileUpload from 'express-fileupload';
 
-import { Database } from '../database';
+import { createPostController } from '../controllers/create-post.controller';
+import { homeController } from '../controllers/home.controller';
+import { storePostController } from '../controllers/store-post.controller';
+import { getPostController } from '../controllers/get-post.controller';
 
 
 export class ExpressServer {
@@ -19,11 +22,6 @@ export class ExpressServer {
   public static app: Express = express();
 
   public static createServer(): void  {
-
-    const myMiddleware = (request: Request, response: Response, next: NextFunction) => {
-      (<any>request).aCustomProperty = 'This is a new property...';
-      next();
-    }
 
     const validateCreatePostMiddleware = (request: Request, response: Response, next: NextFunction) => {      
       if (request.files) {
@@ -39,7 +37,6 @@ export class ExpressServer {
       next();
     }
 
-    this.app.use(myMiddleware);
     this.app.use(fileUpload());
     this.app.use(express.static('public'));
     this.app.use(bodyParser.json());
@@ -58,52 +55,11 @@ export class ExpressServer {
     this.app.set('view engine', 'hbs');
     
 
-    //get-routes
-    this.app.get('/', async (request: Request, response: Response) => {
-      //console.log((<any>request).aCustomProperty);
-      response.render('home', { posts: await Database.readPosts() });
-    });
-    this.app.get('/about', (request: Request, response: Response) => {
-      response.render('about');
-    });
-    this.app.get('/post/:id', async (request: Request, response: Response) => {
-      response.render('post', { post: await Database.readPostById(request.params.id) });      
-    });
-    this.app.get('/contact', (request: Request, response: Response) => {
-      response.render('contact', {
-        scripts: `
-          <script src="vendor/jquery/jquery.min.js"></script>
-          <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>    
-        `
-      });
-    });
-
-    this.app.get('/posts/new', (request: Request, response: Response) => {
-      response.render('create');
-    });
-
-    //post-routes
-    this.app.post('/posts/store', (request: Request, response: Response) => {
-      // this would not exist without this.app.use(bodyParser.json());
-      
-      if (request.files) {
-
-        const image: fileUpload.UploadedFile = <fileUpload.UploadedFile>request.files.image;
-        image.mv(path.resolve(__dirname, '../../public/posts/img', image.name), (error: Error) => {
-          if (error) {
-            throw error;
-          } else {
-            Database.createPosts([{
-              ...request.body,                
-              // this is equivalent with
-              // title: request.body.title,
-              // username: request.body.username, etc.
-              image: `/posts/img/${image.name}`
-              }], () => { response.redirect('/'); });
-          }
-        }); 
-      }
-    });
+    //app routes
+    this.app.get('/', homeController);
+    this.app.get('/post/:id', getPostController);
+    this.app.get('/posts/new', createPostController);
+    this.app.post('/posts/store', storePostController);
   }
 
   public static startServer(port?: number): void {
