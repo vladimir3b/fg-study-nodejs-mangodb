@@ -4,5 +4,5 @@ import {
 } from 'express-serve-static-core';
 
 export const createPostController = (request: Request, response: Response) => {
-  response.render('create');
+  response.render('create-post');
 }

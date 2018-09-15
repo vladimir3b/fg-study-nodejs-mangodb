@@ -14,6 +14,8 @@ import { createPostController } from '../controllers/create-post.controller';
 import { homeController } from '../controllers/home.controller';
 import { storePostController } from '../controllers/store-post.controller';
 import { getPostController } from '../controllers/get-post.controller';
+import { storePostMiddleware } from '../middleware/store-post.middleware';
+import { Routes } from './routes';
 
 
 export class ExpressServer {
@@ -21,28 +23,16 @@ export class ExpressServer {
   public static PORT: number = 4000;
   public static app: Express = express();
 
-  public static createServer(): void  {
-
-    const validateCreatePostMiddleware = (request: Request, response: Response, next: NextFunction) => {      
-      if (request.files) {
-        if (
-          !request.files.image || 
-          !request.body.username || 
-          !request.body.title ||
-          !request.body.subtitle ||
-          !request.body.content) {
-          return response.redirect('/posts/new'); //return exits the function here
-        }
-      }      
-      next();
-    }
-
+  public static createServer(): void {
+ 
+    //setting middlewares
     this.app.use(fileUpload());
     this.app.use(express.static('public'));
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
-    this.app.use('/posts/store', validateCreatePostMiddleware);
+    this.app.use('/post/store', storePostMiddleware);
 
+    //setting the view engine
     this.app.engine('hbs', handlebars({ 
         extname: 'hbs',
         defaultLayout: 'main',
@@ -52,14 +42,11 @@ export class ExpressServer {
         }
     }));
     this.app.set('views', path.resolve(__dirname, '../../views'));       
-    this.app.set('view engine', 'hbs');
-    
+    this.app.set('view engine', 'hbs');    
 
-    //app routes
-    this.app.get('/', homeController);
-    this.app.get('/post/:id', getPostController);
-    this.app.get('/posts/new', createPostController);
-    this.app.post('/posts/store', storePostController);
+    //setting the routes
+    this.app.use(Routes.create());    
+
   }
 
   public static startServer(port?: number): void {
